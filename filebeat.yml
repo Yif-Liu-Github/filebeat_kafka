@@ -1,0 +1,21 @@
+filebeat.modules:
+- module: nginx
+  access:
+    enabled: true
+    var.paths: 
+      - /var/log/nginx/access.log
+filebeat.prospectors:
+- type: log
+  enabled: false
+  paths:
+    - /var/log/*.log
+output.kafka:
+  enabled: true
+  hosts: ["172.25.222.6:10020"]
+  topic: "nginx-filebeat"
+  partition.hash:
+    reachable_only: true
+  compression: gzip
+  max_message_bytes: 1000000
+  required_acks: 1
+logging.to_files: true
